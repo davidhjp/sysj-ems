@@ -1,0 +1,51 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+defaultTasks 'jar'
+
+version = '1.0-SNAPSHOT'
+
+buildscript {
+	ext.repoUrl = 'https://github.com/hjparker/systemj-release/raw/snapshot/'
+	ext.sysj      = [group: 'com.systemjtechnology', name: 'systemj', version:'v2.1-149-gadecaac-SNAPSHOT']
+	ext.rtbase    = [group: 'com.systemjtechnology', name: 'systemj', version:'v2.1-149-gadecaac-SNAPSHOT', classifier: 'sjrt-base']
+	ext.rtdesktop = [group: 'com.systemjtechnology', name: 'systemj', version:'v2.1-149-gadecaac-SNAPSHOT', classifier: 'sjrt-desktop']
+
+	repositories {
+		mavenCentral()
+		maven {
+			url repoUrl
+		}
+	}
+	dependencies {
+		classpath sysj
+		classpath rtbase 
+		classpath rtdesktop
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url repoUrl
+	}
+}
+
+dependencies {
+	compile sysj
+	compile rtbase
+	compile rtdesktop
+}
+
+task SystemJ(type: com.systemj.CompileSystemJ) {
+	classpath buildscript.configurations.classpath
+	dependsOn compileJava
+}
+
+run {
+	main = 'com.systemj.SystemJRunner'
+	args 'src/main/configurations/rpi.xml'
+	classpath 'build/classes/systemj'
+	dependsOn SystemJ
+}

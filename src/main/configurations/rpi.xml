@@ -1,0 +1,14 @@
+<System xmlns="http://systemjtechnology.com">
+<!--   Update IP and Port accordingly -->
+  <SubSystem Name="SS1" Local="true">
+    <ClockDomain Name="CD1" Class="CD1">
+      <iSignal Name="Temp1"     Class="com.systemjx.ems.InputSignal" IP="127.0.0.1" Port="1234" Type="temperature" Group="0B" Node="0A"/>
+      <iSignal Name="Humidity1" Class="com.systemjx.ems.InputSignal" IP="127.0.0.1" Port="1234" Type="humidity"    Group="0B" Node="0A"/>
+      <iSignal Name="Light1"    Class="com.systemjx.ems.InputSignal" IP="127.0.0.1" Port="1234" Type="light"       Group="0B" Node="0A"/>
+
+			<iSignal Name="Temp2"     Class="com.systemjx.ems.InputSignal" IP="127.0.0.1" Port="1234" Type="temperature" Group="0B" Node="0B"/>
+			<iSignal Name="Humidity2" Class="com.systemjx.ems.InputSignal" IP="127.0.0.1" Port="1234" Type="humidity"    Group="0B" Node="0B"/>
+			<iSignal Name="Light2"    Class="com.systemjx.ems.InputSignal" IP="127.0.0.1" Port="1234" Type="light"       Group="0B" Node="0B"/>
+    </ClockDomain>
+  </SubSystem>
+</System>
