@@ -38,4 +38,4 @@ CD1(input float signal Temp1, Humidity1, Light1;
 			System.out.println("Light(0B)\t: "+#Light2);
 		}
 	}
-	 }
+}

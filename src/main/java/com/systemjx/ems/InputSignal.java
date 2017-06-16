@@ -4,6 +4,7 @@ import static com.systemjx.ems.SharedResource.es;
 import static com.systemjx.ems.SharedResource.tasks;
 
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 
 import com.systemj.ipc.GenericSignalReceiver;
 
@@ -36,11 +37,34 @@ public class InputSignal extends GenericSignalReceiver {
 	public void run() {
 		if (!skipRun) {
 			synchronized (Class.class) {
-				tasks.forEach((k, v) -> es.submit(v));
-				tasks.clear();
-				skipRun = true;
+				if (!es.isShutdown()) {
+					tasks.forEach((k, v) -> es.submit(v));
+					tasks.clear();
+					skipRun = true;
+				}
 			}
 		}
 	}
 
+	
+	@Override
+	public boolean isShutDown() {
+		return shutdown;
+	}
+
+	@Override
+	public void cleanUp() {
+		synchronized (Class.class) {
+			if (!es.isShutdown()) {
+				es.shutdownNow();
+				try {
+					es.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		shutdown = true;
+	}
+	
 }
