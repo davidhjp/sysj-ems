@@ -121,7 +121,7 @@ public class PacketWorker implements Runnable {
 				}
 			} catch (SocketTimeoutException e) {
 			} catch (Exception e) {
-				System.out.println(e.getMessage() + "\n"
+				log.info(e.getMessage() + "\n"
 						+ Stream.of(e.getStackTrace()).map(v -> v.toString()).reduce((r, l) -> r + l + "\n").get());
 			}
 		}
