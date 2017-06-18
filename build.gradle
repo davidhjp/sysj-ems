@@ -4,6 +4,12 @@ apply plugin: 'application'
 
 defaultTasks 'jar'
 
+def getDate() {
+	def date = new Date()
+	def formattedDate = date.format('yyyyMMddHHmmss')
+	return formattedDate
+}
+
 version = '1.0-SNAPSHOT'
 
 buildscript {
@@ -48,4 +54,9 @@ run {
 	args 'src/main/configurations/rpi.xml'
 	classpath 'build/classes/systemj'
 	dependsOn SystemJ
+}
+
+jar { 
+	if(version.endsWith("-SNAPSHOT"))
+		classifier getDate()
 }
