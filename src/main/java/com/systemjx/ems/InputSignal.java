@@ -36,7 +36,7 @@ public class InputSignal extends GenericSignalReceiver {
 	@Override
 	public void run() {
 		if (!skipRun) {
-			synchronized (Class.class) {
+			synchronized (InputSignal.class) {
 				if (!es.isShutdown()) {
 					tasks.forEach((k, v) -> es.submit(v));
 					tasks.clear();
