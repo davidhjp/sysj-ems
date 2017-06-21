@@ -54,7 +54,7 @@ public class InputSignal extends GenericSignalReceiver {
 
 	@Override
 	public void cleanUp() {
-		synchronized (Class.class) {
+		synchronized (InputSignal.class) {
 			if (!es.isShutdown()) {
 				es.shutdownNow();
 				try {
