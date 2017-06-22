@@ -1,5 +1,6 @@
 CD1(input float signal Temp1, Humidity1, Light1;
 		input float signal Temp2, Humidity2, Light2;
+		output int signal LED1, LED2;
 	 )->{
 	{
 		loop {
@@ -36,6 +37,22 @@ CD1(input float signal Temp1, Humidity1, Light1;
 			System.out.println("Temp(0B)\t: "+#Temp2);
 			System.out.println("Humidity(0B)\t: "+#Humidity2);
 			System.out.println("Light(0B)\t: "+#Light2);
+		}
+	}
+	||
+	{
+		loop {
+			{
+				waitl(1s);
+				trap(T){{sustain LED1(1);} || {waitl(1s); exit(T);}}
+				pause;
+			}
+			||
+			{
+				trap(T){{sustain LED2(1);} || {waitl(1s); exit(T);}}
+				waitl(1s);
+				pause;
+			}
 		}
 	}
 }

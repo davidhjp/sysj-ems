@@ -1,9 +1,9 @@
 package com.systemjx.ems;
 
+import static com.systemj.Utils.log;
 import static com.systemjx.ems.SharedResource.TYPE_HUMIDITY;
 import static com.systemjx.ems.SharedResource.TYPE_LIGHT;
 import static com.systemjx.ems.SharedResource.TYPE_TEMPERATURE;
-import static com.systemj.Utils.log;
 
 import java.io.DataInputStream;
 import java.net.InetSocketAddress;
@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import javax.xml.bind.DatatypeConverter;
 
 import com.systemj.Signal;
 

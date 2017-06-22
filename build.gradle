@@ -46,6 +46,7 @@ dependencies {
 
 task SystemJ(type: com.systemj.CompileSystemJ) {
 	classpath buildscript.configurations.classpath
+	options "--silence": ""
 	dependsOn compileJava
 }
 

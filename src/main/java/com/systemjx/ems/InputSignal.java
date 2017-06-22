@@ -1,16 +1,18 @@
 package com.systemjx.ems;
 
-import static com.systemjx.ems.SharedResource.es;
-import static com.systemjx.ems.SharedResource.tasks;
-
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.systemj.ipc.GenericSignalReceiver;
 
 public class InputSignal extends GenericSignalReceiver {
 	private static volatile boolean skipRun = false;
-	
+	protected static final ExecutorService es = Executors.newCachedThreadPool();
+	protected static final Map<String, PacketWorker> tasks = new HashMap<>();
 	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void configure(Hashtable tb) throws RuntimeException {
