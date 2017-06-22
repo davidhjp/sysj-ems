@@ -1,21 +1,21 @@
 # SystemJ IPC Classes for the Energy Monitoring System
 
 Input and output SystemJ signals using `com.systemjx.ems.InputSignal` and `com.systemjx.ems.OutputSignal` 
-IPC classes build and transmit packets via TCP socket using the following packet formats. 
-All fields are 1 byte except temperature, humidity and light values in the outgoing packet.
+IPC classes build and transmit packets via TCP socket based on the packet formats shown below. 
+All fields are 1 byte long except for temperature, humidity and light values, which are 2 bytes long.
 
-Incoming packet format:
+Packet format for `com.systemjx.ems.OutputSignal`:
 ```
-------------------------------------------------------------------------------------------------
-| AA | BB | Size | Node Group ID | Node ID | Packet type (Fixed to 0x84) | Actuator ID | Value |
-------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+| AA | BB | Size | Node Group ID (0x0B) | Node ID | Packet type (0x84) | Actuator ID | Value |
+----------------------------------------------------------------------------------------------
 ```
 
-Outgoing packet format:
+Packet format for `com.systemjx.ems.InputSignal`:
 ```
------------------------------------------------------------------------------------------------------------
-| AA | BB | Size | Node Group ID | Node ID | Packet type (Fixed to 0xA0) | Temperature | Humidity | Light |
------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+| AA | BB | Size | Node Group ID (0x0B) | Node ID | Packet type (0xA0) | Temperature | Humidity | Light |
+---------------------------------------------------------------------------------------------------------
 ```
 
 ## Running the test program
