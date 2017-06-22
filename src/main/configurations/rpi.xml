@@ -2,16 +2,16 @@
 <!--   Update IP and Port accordingly -->
   <SubSystem Name="SS1" Local="true">
     <ClockDomain Name="CD1" Class="CD1">
-      <iSignal Name="Temp1"     Class="com.systemjx.ems.InputSignal"  IP="127.0.0.1" Port="1986" Type="temperature" Group="0B" Node="0A"/>
-      <iSignal Name="Humidity1" Class="com.systemjx.ems.InputSignal"  IP="127.0.0.1" Port="1986" Type="humidity"    Group="0B" Node="0A"/>
-      <iSignal Name="Light1"    Class="com.systemjx.ems.InputSignal"  IP="127.0.0.1" Port="1986" Type="light"       Group="0B" Node="0A"/>
+      <iSignal Name="Temp1"     Class="com.systemjx.ems.InputSignal"  IP="172.24.39.232" Port="1986" Type="temperature" Group="0B" Node="0A"/>
+      <iSignal Name="Humidity1" Class="com.systemjx.ems.InputSignal"  IP="172.24.39.232" Port="1986" Type="humidity"    Group="0B" Node="0A"/>
+      <iSignal Name="Light1"    Class="com.systemjx.ems.InputSignal"  IP="172.24.39.232" Port="1986" Type="light"       Group="0B" Node="0A"/>
 
-			<iSignal Name="Temp2"     Class="com.systemjx.ems.InputSignal"  IP="127.0.0.1" Port="1986" Type="temperature" Group="0B" Node="0B"/>
-			<iSignal Name="Humidity2" Class="com.systemjx.ems.InputSignal"  IP="127.0.0.1" Port="1986" Type="humidity"    Group="0B" Node="0B"/>
-			<iSignal Name="Light2"    Class="com.systemjx.ems.InputSignal"  IP="127.0.0.1" Port="1986" Type="light"       Group="0B" Node="0B"/>
+			<iSignal Name="Temp2"     Class="com.systemjx.ems.InputSignal"  IP="172.24.39.232" Port="1986" Type="temperature" Group="0B" Node="0B"/>
+			<iSignal Name="Humidity2" Class="com.systemjx.ems.InputSignal"  IP="172.24.39.232" Port="1986" Type="humidity"    Group="0B" Node="0B"/>
+			<iSignal Name="Light2"    Class="com.systemjx.ems.InputSignal"  IP="172.24.39.232" Port="1986" Type="light"       Group="0B" Node="0B"/>
 
-			<oSignal Name="LED1"      Class="com.systemjx.ems.OutputSignal" IP="127.0.0.1" Port="1986" Group="0B" Node="14" Actuator="00"/>
-			<oSignal Name="LED2"      Class="com.systemjx.ems.OutputSignal" IP="127.0.0.1" Port="1986" Group="0B" Node="14" Actuator="01"/>
+			<oSignal Name="LED1"      Class="com.systemjx.ems.OutputSignal" IP="172.24.39.232" Port="1986" Group="0B" Node="14" Actuator="00"/>
+			<oSignal Name="LED2"      Class="com.systemjx.ems.OutputSignal" IP="172.24.39.232" Port="1986" Group="0B" Node="14" Actuator="01"/>
     </ClockDomain>
   </SubSystem>
 </System>
