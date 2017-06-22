@@ -118,4 +118,20 @@ public class OutputSignal extends GenericSignalSender {
 		}
 	}
 
+	@Override
+	public void cleanUp() {
+		synchronized (Thread.currentThread()) {
+			socketMap.get(Thread.currentThread()).forEach((k, v) -> {
+				try {
+					v.close();
+				} catch (IOException e) {
+					logException(e);
+				}
+			});
+		}
+	}
+	
+	
+	
+
 }
