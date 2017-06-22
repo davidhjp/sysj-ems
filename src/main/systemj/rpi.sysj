@@ -1,44 +1,24 @@
+reaction Sensing(String NODE: 
+		input float signal Temp, input float signal Humidity, input float signal Light,
+		output int signal LED) {
+
+	loop {
+		{await(Temp);} || {await(Humidity);} || {await(Light);}
+		System.out.println("Temp("+NODE+")\t: "+#Temp);
+		System.out.println("Humidity("+NODE+")\t: "+#Humidity);
+		System.out.println("Light("+NODE+")\t: "+#Light);
+	}
+
+}
+
 CD1(input float signal Temp1, Humidity1, Light1;
 		input float signal Temp2, Humidity2, Light2;
 		output int signal LED1, LED2;
 	 )->{
-	{
-		loop {
-			{
-				await(Temp1);
-			}
-			||
-			{
-				await(Humidity1);
-			}
-			||
-			{
-				await(Light1);
-			}
-			System.out.println("Temp(0A)\t: "+#Temp1);
-			System.out.println("Humidity(0A)\t: "+#Humidity1);
-			System.out.println("Light(0A)\t: "+#Light1);
-		}
-	}
+
+	Sensing("0A":Temp1,Humidity1,Light1,LED1)
 	||
-	{
-		loop {
-			{
-				await(Temp2);
-			}
-			||
-			{
-				await(Humidity2);
-			}
-			||
-			{
-				await(Light2);
-			}
-			System.out.println("Temp(0B)\t: "+#Temp2);
-			System.out.println("Humidity(0B)\t: "+#Humidity2);
-			System.out.println("Light(0B)\t: "+#Light2);
-		}
-	}
+	Sensing("0B":Temp2,Humidity2,Light2,LED2)
 	||
 	{
 		loop {
@@ -55,4 +35,5 @@ CD1(input float signal Temp1, Humidity1, Light1;
 			}
 		}
 	}
+
 }
