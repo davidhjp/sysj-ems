@@ -4,6 +4,7 @@ import static com.systemj.Utils.log;
 import static com.systemjx.ems.SharedResource.TYPE_HUMIDITY;
 import static com.systemjx.ems.SharedResource.TYPE_LIGHT;
 import static com.systemjx.ems.SharedResource.TYPE_TEMPERATURE;
+import static com.systemjx.ems.SharedResource.logException;
 
 import java.io.DataInputStream;
 import java.net.InetSocketAddress;
@@ -16,7 +17,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import com.systemj.Signal;
 
@@ -75,7 +75,7 @@ public class PacketWorker implements Runnable {
 	private static float getLight(byte[] b) {
 		return ((b[7] << 8) + b[8]) * 16;
 	}
-
+	
 	@Override
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
@@ -98,7 +98,7 @@ public class PacketWorker implements Runnable {
 								String idLight = buildID(getGroup(payload), getNode(payload), TYPE_LIGHT);
 								log.info("Resolved IDs for fetching signals : \n" + idTemp + "\n" + idHumidity + "\n"
 										+ idLight);
-
+								getPacketType(payload);
 								// Extracting a number for each sensor input
 								float t = getTemperature(payload);
 								float h = getHumidity(payload);
@@ -119,8 +119,7 @@ public class PacketWorker implements Runnable {
 				}
 			} catch (SocketTimeoutException e) {
 			} catch (Exception e) {
-				log.info(e.getMessage() + "\n"
-						+ Stream.of(e.getStackTrace()).map(v -> v.toString()).reduce((r, l) -> r + l + "\n").get());
+				logException(e);
 			}
 		}
 	}

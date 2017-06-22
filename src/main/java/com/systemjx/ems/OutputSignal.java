@@ -1,6 +1,6 @@
 package com.systemjx.ems;
 
-import static com.systemj.Utils.log;
+import static com.systemjx.ems.SharedResource.logException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import com.systemj.ipc.GenericSignalSender;
 
@@ -69,8 +68,7 @@ public class OutputSignal extends GenericSignalSender {
 			} catch (SocketTimeoutException e) {
 				return false;
 			} catch (IOException e){
-				log.info(e.getMessage() + "\n"
-						+ Stream.of(e.getStackTrace()).map(v -> v.toString()).reduce((r, l) -> r + l + "\n").get());
+				logException(e);
 				return false;
 			}
 			super.buffer = b;
@@ -88,8 +86,7 @@ public class OutputSignal extends GenericSignalSender {
 				s.close();
 				getSockets().remove(urn);
 			} catch (IOException e1) {
-				log.info(e1.getMessage() + "\n"
-						+ Stream.of(e1.getStackTrace()).map(v -> v.toString()).reduce((r, l) -> r + l + "\n").get());
+				logException(e1);
 			}
 		}
 	}
