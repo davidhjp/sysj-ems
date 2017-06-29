@@ -1,6 +1,5 @@
 reaction Sensing(String NODE: 
-		input float signal Temp, input float signal Humidity, input float signal Light,
-		output int signal LED) {
+		input float signal Temp, input float signal Humidity, input float signal Light) {
 
 	loop {
 		{await(Temp);} || {await(Humidity);} || {await(Light);}
@@ -8,31 +7,29 @@ reaction Sensing(String NODE:
 		System.out.println("Humidity("+NODE+")\t: "+#Humidity);
 		System.out.println("Light("+NODE+")\t: "+#Light);
 	}
+}
 
+reaction Actuator(:output int signal LED) {
+	waitl(1s);
+	trap(T){{sustain LED(1);} || {waitl(1s); exit(T);}}
+	pause;
 }
 
 CD1(input float signal Temp1, Humidity1, Light1;
 		input float signal Temp2, Humidity2, Light2;
-		output int signal LED1, LED2;
+		output int signal LED11, LED12, LED21, LED22;
 	 )->{
 
-	Sensing("0A":Temp1,Humidity1,Light1,LED1)
+	Sensing("0A":Temp1,Humidity1,Light1)
 	||
-	Sensing("0B":Temp2,Humidity2,Light2,LED2)
+	Sensing("0B":Temp2,Humidity2,Light2)
 	||
 	{
 		loop {
-			{
-				waitl(1s);
-				trap(T){{sustain LED1(1);} || {waitl(1s); exit(T);}}
-				pause;
-			}
-			||
-			{
-				trap(T){{sustain LED2(1);} || {waitl(1s); exit(T);}}
-				waitl(1s);
-				pause;
-			}
+			Actuator(:LED11);
+			Actuator(:LED12);
+			Actuator(:LED21);
+			Actuator(:LED22);
 		}
 	}
 
