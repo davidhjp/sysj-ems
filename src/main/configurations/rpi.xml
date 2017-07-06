@@ -14,6 +14,11 @@
 			<oSignal Name="LED12"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="14" Actuator="01"/>
 			<oSignal Name="LED21"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="15" Actuator="00"/>
 			<oSignal Name="LED22"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="15" Actuator="01"/>
+
+			<oSignal Name="LED31"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="14" Actuator="00"/>
+			<oSignal Name="LED32"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="14" Actuator="01"/>
+			<oSignal Name="LED41"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="15" Actuator="00"/>
+			<oSignal Name="LED42"      Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="15" Actuator="01"/>
     </ClockDomain>
   </SubSystem>
 </System>

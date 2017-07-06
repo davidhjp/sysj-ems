@@ -17,7 +17,7 @@ reaction Actuator(:output int signal LED) {
 
 CD1(input float signal Temp1, Humidity1, Light1;
 		input float signal Temp2, Humidity2, Light2;
-		output int signal LED11, LED12, LED21, LED22;
+		output int signal LED11, LED12, LED21, LED22, LED31,LED32,LED41,LED42;
 	 )->{
 
 	Sensing("0A":Temp1,Humidity1,Light1)
@@ -30,6 +30,10 @@ CD1(input float signal Temp1, Humidity1, Light1;
 			Actuator(:LED12);
 			Actuator(:LED21);
 			Actuator(:LED22);
+			Actuator(:LED31);
+			Actuator(:LED32);
+			Actuator(:LED41);
+			Actuator(:LED42);
 		}
 	}
 
