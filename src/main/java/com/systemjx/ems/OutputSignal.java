@@ -71,8 +71,8 @@ public class OutputSignal extends GenericSignalSender {
 				logException(e);
 				return false;
 			}
-			super.buffer = b;
 		}
+		super.buffer = b;
 		return true;
 	}
 
