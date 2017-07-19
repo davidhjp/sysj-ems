@@ -121,7 +121,7 @@ public class PacketWorker implements Runnable {
 	private void parsePacket(byte[] payload) {
 		String pType = getPacketType(payload);
 		switch (pType) {
-		case PACKET_TYPE_1: // A0
+		case PACKET_TYPE_1: // 84
 			// Building IDs for the Map
 			String idTemp = buildID(getGroup(payload), getNode(payload), SENSOR_TEMPERATURE);
 			String idHumidity = buildID(getGroup(payload), getNode(payload), SENSOR_HUMIDITY);
