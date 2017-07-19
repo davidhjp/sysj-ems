@@ -9,15 +9,16 @@ reaction Sensing(String NODE:
 	}
 }
 
-reaction Actuator(:output int signal LED) {
-	waitl(1s);
-	trap(T){{sustain LED(1);} || {waitl(1s); exit(T);}}
+reaction Actuator(int delay :output int signal O) {
+	waitl(delay s);
+	trap(T){{sustain O(1);} || {waitl(delay s); exit(T);}}
 	pause;
 }
 
 CD1(input float signal Temp1, Humidity1, Light1;
 		input float signal Temp2, Humidity2, Light2;
 		output int signal LED11, LED12, LED21, LED22, LED31,LED32,LED41,LED42;
+		output int signal Heater,Bulb;
 	 )->{
 
 	Sensing("0A":Temp1,Humidity1,Light1)
@@ -26,14 +27,26 @@ CD1(input float signal Temp1, Humidity1, Light1;
 	||
 	{
 		loop {
-			Actuator(:LED11);
-			Actuator(:LED12);
-			Actuator(:LED21);
-			Actuator(:LED22);
-			Actuator(:LED31);
-			Actuator(:LED32);
-			Actuator(:LED41);
-			Actuator(:LED42);
+			Actuator(1:LED11);
+			Actuator(1:LED12);
+			Actuator(1:LED21);
+			Actuator(1:LED22);
+			Actuator(1:LED31);
+			Actuator(1:LED32);
+			Actuator(1:LED41);
+			Actuator(1:LED42);
+		}
+	}
+	||
+	{
+		loop {
+			Actuator(10:Heater);
+		}
+	}
+	||
+	{
+		loop {
+			Actuator(10:Bulb);
 		}
 	}
 
