@@ -7,9 +7,14 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class SharedResource {
-	static final String TYPE_TEMPERATURE = "temperature";
-	static final String TYPE_HUMIDITY = "humidity";
-	static final String TYPE_LIGHT = "light";
+	static final String SENOR_TEMPERATURE = "temperature";
+	static final String SENSOR_HUMIDITY = "humidity";
+	static final String SENSOR_LIGHT = "light";
+	static final String TYPE_POWER = "power";
+	
+	static final String PACKET_TYPE_1 = "84";  // THL
+	static final String PACKET_TYPE_2 = "30";  // Heater state
+	static final String PACKET_TYPE_3 = "31";  // Instantaneous power
 	
 	public static void logException(Throwable e){
 		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw);) {

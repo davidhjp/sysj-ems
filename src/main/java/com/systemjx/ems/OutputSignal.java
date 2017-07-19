@@ -21,12 +21,13 @@ public class OutputSignal extends GenericSignalSender {
 	private int actuatorId;
 	private int groupId;
 	private int nodeId;
+	private int packetType;
 	private boolean fsent = true;
 	private int preVal = Integer.MAX_VALUE;
 	private static Map<Thread, Map<String, Socket>> socketMap = new HashMap<>();
 	private String urn;
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void configure(Hashtable t) throws RuntimeException {
 		this.ip = (String) t.get("IP");
@@ -34,6 +35,7 @@ public class OutputSignal extends GenericSignalSender {
 		this.actuatorId = Integer.parseInt((String) t.get("Actuator"), 16);
 		this.groupId = Integer.parseInt((String) t.get("Group"), 16);
 		this.nodeId = Integer.parseInt((String) t.get("Node"), 16);
+		this.packetType = Integer.parseInt((String) t.getOrDefault("Type", "A0"), 16);
 		this.urn = ip + ":" + port;
 		socketMap.putIfAbsent(Thread.currentThread(), new HashMap<>());
 	}
@@ -47,7 +49,7 @@ public class OutputSignal extends GenericSignalSender {
 		b.putShort((short)0xAABB);
 		b.put((byte)PACKET_SIZE);
 		b.putShort((short)(groupId << 8 | nodeId));
-		b.put((byte)0xA0); // Packet type -- fixed
+		b.put((byte)packetType); // Packet type, default: 0xA0
 		b.put((byte)actuatorId);
 		b.put(v);
 		b.position(0);
