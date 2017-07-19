@@ -3,10 +3,12 @@ package com.systemjx.ems;
 import static com.systemj.Utils.log;
 import static com.systemjx.ems.SharedResource.SENSOR_HUMIDITY;
 import static com.systemjx.ems.SharedResource.SENSOR_LIGHT;
-import static com.systemjx.ems.SharedResource.SENOR_TEMPERATURE;
+import static com.systemjx.ems.SharedResource.SENSOR_TEMPERATURE;
 import static com.systemjx.ems.SharedResource.PACKET_TYPE_1;
 import static com.systemjx.ems.SharedResource.PACKET_TYPE_2;
 import static com.systemjx.ems.SharedResource.PACKET_TYPE_3;
+import static com.systemjx.ems.SharedResource.SENSOR_HEATER_POWER;
+import static com.systemjx.ems.SharedResource.SENSOR_HEATER_STATE;
 import static com.systemjx.ems.SharedResource.logException;
 
 import java.io.DataInputStream;
@@ -66,6 +68,11 @@ public class PacketWorker implements Runnable {
 	private static String getPacketType(byte[] b) {
 		return String.format("%02x", b[2]).toUpperCase();
 	}
+	
+
+	private int getHeaterState(byte[] b) {
+		return b[3];
+	}
 
 	private static float getTemperature(byte[] b) {
 		return b[3] + b[4] / 100;
@@ -113,7 +120,7 @@ public class PacketWorker implements Runnable {
 		switch (pType) {
 		case PACKET_TYPE_1: // A0
 			// Building IDs for the Map
-			String idTemp = buildID(getGroup(payload), getNode(payload), SENOR_TEMPERATURE);
+			String idTemp = buildID(getGroup(payload), getNode(payload), SENSOR_TEMPERATURE);
 			String idHumidity = buildID(getGroup(payload), getNode(payload), SENSOR_HUMIDITY);
 			String idLight = buildID(getGroup(payload), getNode(payload), SENSOR_LIGHT);
 			log.info("Resolved IDs for fetching signals : \n" + idTemp + "\n" + idHumidity + "\n" + idLight);
@@ -122,19 +129,36 @@ public class PacketWorker implements Runnable {
 			float t = getTemperature(payload);
 			float h = getHumidity(payload);
 			float l = getLight(payload);
-
-			// Setting values for all signals
-			List<Signal> signals = this.is.getOrDefault(idHumidity, new ArrayList<Signal>());
-			signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, h }));
-			signals = this.is.getOrDefault(idLight, new ArrayList<Signal>());
-			signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, l }));
-			signals = this.is.getOrDefault(idTemp, new ArrayList<Signal>());
-			signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, t }));
+			{
+				// Setting values for all signals
+				List<Signal> signals = this.is.getOrDefault(idHumidity, new ArrayList<Signal>());
+				signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, h }));
+				signals = this.is.getOrDefault(idLight, new ArrayList<Signal>());
+				signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, l }));
+				signals = this.is.getOrDefault(idTemp, new ArrayList<Signal>());
+				signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, t }));
+			}
 			log.info("Received data - Temperature: " + t + "Humidity: " + h + " Light: " + l);
 			break;
 		case PACKET_TYPE_2: // 30, heater state
+			String idHS = buildID(getGroup(payload), getNode(payload), SENSOR_HEATER_STATE);
+			int st = getHeaterState(payload);
+			{
+				// Setting values for all signals
+				List<Signal> signals = this.is.getOrDefault(idHS, new ArrayList<Signal>());
+				signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, st }));
+			}
+			log.info("Received heater state: " + idHS + " (" + st + ")");
 			break;
 		case PACKET_TYPE_3: // 31, instantaneous power
+			String idP = buildID(getGroup(payload), getNode(payload), SENSOR_HEATER_POWER);
+			int p = getHeaterState(payload);
+			{
+				// Setting values for all signals
+				List<Signal> signals = this.is.getOrDefault(idP, new ArrayList<Signal>());
+				signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, p }));
+			}
+			log.info("Received P: " + idP+ " (" + p + ")");
 			break;
 		default:
 			log.warning("Unexpected packet type: " + pType);

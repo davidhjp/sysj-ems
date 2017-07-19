@@ -15,38 +15,44 @@ reaction Actuator(int delay :output int signal O) {
 	pause;
 }
 
-CD1(input float signal Temp1, Humidity1, Light1;
-		input float signal Temp2, Humidity2, Light2;
-		output int signal LED11, LED12, LED21, LED22, LED31,LED32,LED41,LED42;
-		output int signal Heater,Bulb;
+CD1(input float signal T1, H1, L1;
+		input float signal T2, H2, L2;
+		input float signal T3, H3, L3;
+		input float signal T4, H4, L4;
+		output int signal LED1,LED2,LED3,LED4,LED5,LED6,LED7,LED8;
+		output int signal Heater1,Bulb1;
 	 )->{
 
-	Sensing("0A":Temp1,Humidity1,Light1)
+	Sensing("0A-201":T1,H1,L1)
 	||
-	Sensing("0B":Temp2,Humidity2,Light2)
+	Sensing("0B-201":T2,H2,L2)
+	||
+	Sensing("0A-101":T3,H3,L3)
+	||
+	Sensing("0B-101":T4,H4,L4)
 	||
 	{
 		loop {
-			Actuator(1:LED11);
-			Actuator(1:LED12);
-			Actuator(1:LED21);
-			Actuator(1:LED22);
-			Actuator(1:LED31);
-			Actuator(1:LED32);
-			Actuator(1:LED41);
-			Actuator(1:LED42);
+			Actuator(1:LED1);
+			Actuator(1:LED2);
+			Actuator(1:LED3);
+			Actuator(1:LED4);
+			Actuator(1:LED5);
+			Actuator(1:LED6);
+			Actuator(1:LED7);
+			Actuator(1:LED8);
 		}
 	}
 	||
 	{
 		loop {
-			Actuator(10:Heater);
+			Actuator(10:Heater1);
 		}
 	}
 	||
 	{
 		loop {
-			Actuator(10:Bulb);
+			Actuator(10:Bulb1);
 		}
 	}
 
