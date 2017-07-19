@@ -69,7 +69,6 @@ public class PacketWorker implements Runnable {
 		return String.format("%02x", b[2]).toUpperCase();
 	}
 	
-
 	private int getHeaterState(byte[] b) {
 		return b[3];
 	}
@@ -84,6 +83,10 @@ public class PacketWorker implements Runnable {
 
 	private static float getLight(byte[] b) {
 		return ((b[7] << 8) + b[8]) * 16;
+	}
+	
+	private int getHeaterPower(byte[] b) {
+		return ByteBuffer.wrap(b, 3, 2).order(ByteOrder.BIG_ENDIAN).getShort();
 	}
 	
 	@Override
@@ -152,7 +155,7 @@ public class PacketWorker implements Runnable {
 			break;
 		case PACKET_TYPE_3: // 31, instantaneous power
 			String idP = buildID(getGroup(payload), getNode(payload), SENSOR_HEATER_POWER);
-			int p = getHeaterState(payload);
+			int p = getHeaterPower(payload);
 			{
 				// Setting values for all signals
 				List<Signal> signals = this.is.getOrDefault(idP, new ArrayList<Signal>());

@@ -18,8 +18,8 @@
 			<iSignal Name="H4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="humidity"    Group="0B" Node="0B"/>
 			<iSignal Name="L4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="light"       Group="0B" Node="0B"/>
 
-<!--       <iSignal Name="HeaterState" Class="com.systemjx.ems.InputSignal" IP="192.168.0.101" Port="1986" Sensor="heater_power" Group="0B" Node=""/> -->
-<!--       <iSignal Name="HeaterPower" Class="com.systemjx.ems.InputSignal" IP="192.168.0.101" Port="1986" Sensor="heater_state" Group="0B" Node=""/> -->
+<!--       <iSignal Name="HeaterState" Class="com.systemjx.ems.InputSignal" IP="192.168.0.101" Port="1986" Sensor="heater_state" Group="0B" Node=""/> -->
+<!--       <iSignal Name="HeaterPower" Class="com.systemjx.ems.InputSignal" IP="192.168.0.101" Port="1986" Sensor="heater_power" Group="0B" Node=""/> -->
 
 			<oSignal Name="LED1"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="14" Actuator="00"/>
 			<oSignal Name="LED2"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="14" Actuator="01"/>
