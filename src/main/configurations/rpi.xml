@@ -10,29 +10,36 @@
 			<iSignal Name="H2"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.201" Port="1986" Sensor="humidity"    Group="0B" Node="0B"/>
 			<iSignal Name="L2"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.201" Port="1986" Sensor="light"       Group="0B" Node="0B"/>
 			
-			<iSignal Name="T3"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="temperature" Group="0B" Node="0A"/>
-			<iSignal Name="H3"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="humidity"    Group="0B" Node="0A"/>
-			<iSignal Name="L3"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="light"       Group="0B" Node="0A"/>
+			<iSignal Name="T3"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.202" Port="1986" Sensor="temperature" Group="0B" Node="0A"/>
+			<iSignal Name="H3"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.202" Port="1986" Sensor="humidity"    Group="0B" Node="0A"/>
+			<iSignal Name="L3"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.202" Port="1986" Sensor="light"       Group="0B" Node="0A"/>
 
-			<iSignal Name="T4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="temperature" Group="0B" Node="0B"/>
-			<iSignal Name="H4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="humidity"    Group="0B" Node="0B"/>
-			<iSignal Name="L4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.101" Port="1986" Sensor="light"       Group="0B" Node="0B"/>
+			<iSignal Name="T4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.202" Port="1986" Sensor="temperature" Group="0B" Node="0B"/>
+			<iSignal Name="H4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.202" Port="1986" Sensor="humidity"    Group="0B" Node="0B"/>
+			<iSignal Name="L4"     Class="com.systemjx.ems.InputSignal"   IP="192.168.0.202" Port="1986" Sensor="light"       Group="0B" Node="0B"/>
 
-<!--       <iSignal Name="HeaterState" Class="com.systemjx.ems.InputSignal" IP="192.168.0.101" Port="1986" Sensor="heater_state" Group="0B" Node=""/> -->
-<!--       <iSignal Name="HeaterPower" Class="com.systemjx.ems.InputSignal" IP="192.168.0.101" Port="1986" Sensor="heater_power" Group="0B" Node=""/> -->
+			<iSignal Name="HeaterState30" Class="com.systemjx.ems.InputSignal" IP="192.168.0.201" Port="3000" Sensor="heater_state" Group="0B" Node="1E"/>
+			<iSignal Name="HeaterPower30" Class="com.systemjx.ems.InputSignal" IP="192.168.0.201" Port="3000" Sensor="heater_power" Group="0B" Node="1E"/>
+			<iSignal Name="HeaterState32" Class="com.systemjx.ems.InputSignal" IP="192.168.0.202" Port="3000" Sensor="heater_state" Group="0B" Node="20"/>
+			<iSignal Name="HeaterPower32" Class="com.systemjx.ems.InputSignal" IP="192.168.0.202" Port="3000" Sensor="heater_power" Group="0B" Node="20"/>
 
 			<oSignal Name="LED1"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="14" Actuator="00"/>
 			<oSignal Name="LED2"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="14" Actuator="01"/>
 			<oSignal Name="LED3"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="15" Actuator="00"/>
 			<oSignal Name="LED4"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="1986" Group="0B" Node="15" Actuator="01"/>
 
-			<oSignal Name="LED5"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="14" Actuator="00"/>
-			<oSignal Name="LED6"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="14" Actuator="01"/>
-			<oSignal Name="LED7"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="15" Actuator="00"/>
-			<oSignal Name="LED8"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.101" Port="1986" Group="0B" Node="15" Actuator="01"/>
+			<oSignal Name="LED5"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="1986" Group="0B" Node="14" Actuator="00"/>
+			<oSignal Name="LED6"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="1986" Group="0B" Node="14" Actuator="01"/>
+			<oSignal Name="LED7"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="1986" Group="0B" Node="15" Actuator="00"/>
+			<oSignal Name="LED8"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="1986" Group="0B" Node="15" Actuator="01"/>
 
-			<oSignal Name="Heater1" Class="com.systemjx.ems.OutputSignal" IP="192.168.0.102" Port="3000"  Group="0B" Node="1E" Actuator="01"/>
-			<oSignal Name="Bulb1"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.102" Port="3000"  Group="0B" Node="28" Actuator="01"/>
+			<oSignal Name="Heater30" Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="3000"  Group="0B" Node="1E" Actuator="01"/>
+			<oSignal Name="Bulb40"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="3000"  Group="0B" Node="28" Actuator="01"/>
+			<oSignal Name="Bulb41"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.201" Port="3000"  Group="0B" Node="29" Actuator="01"/>
+
+			<oSignal Name="Heater32" Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="3000"  Group="0B" Node="20" Actuator="01"/>
+			<oSignal Name="Bulb42"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="3000"  Group="0B" Node="2A" Actuator="01"/>
+			<oSignal Name="Bulb43"   Class="com.systemjx.ems.OutputSignal" IP="192.168.0.202" Port="3000"  Group="0B" Node="2B" Actuator="01"/>
     </ClockDomain>
   </SubSystem>
 </System>

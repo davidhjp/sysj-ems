@@ -19,8 +19,11 @@ CD1(input float signal T1, H1, L1;
 		input float signal T2, H2, L2;
 		input float signal T3, H3, L3;
 		input float signal T4, H4, L4;
+		input int signal HeaterState30, HeaterPower30, HeaterState32, HeaterPower32;
+
 		output int signal LED1,LED2,LED3,LED4,LED5,LED6,LED7,LED8;
-		output int signal Heater1,Bulb1;
+		output int signal Heater30,Heater32; 
+		output int signal Bulb40,Bulb41,Bulb42,Bulb43;
 	 )->{
 
 	Sensing("0A-201":T1,H1,L1)
@@ -33,26 +36,66 @@ CD1(input float signal T1, H1, L1;
 	||
 	{
 		loop {
-			Actuator(1:LED1);
-			Actuator(1:LED2);
-			Actuator(1:LED3);
-			Actuator(1:LED4);
-			Actuator(1:LED5);
-			Actuator(1:LED6);
-			Actuator(1:LED7);
-			Actuator(1:LED8);
+			{
+				Actuator(1:LED1);
+				Actuator(1:LED2);
+				Actuator(1:LED3);
+				Actuator(1:LED4);
+			}
+			||
+			{
+				Actuator(1:LED5);
+				Actuator(1:LED6);
+				Actuator(1:LED7);
+				Actuator(1:LED8);
+			}
 		}
 	}
 	||
 	{
 		loop {
-			Actuator(10:Heater1);
+			Actuator(10:Heater30)
+			||
+			Actuator(10:Heater32)
 		}
 	}
 	||
 	{
 		loop {
-			Actuator(10:Bulb1);
+			{
+				Actuator(3:Bulb40);
+				Actuator(3:Bulb41);
+			}
+			||
+			{
+				Actuator(3:Bulb42);
+				Actuator(3:Bulb43);
+			}
+		}
+	}
+	||
+	{
+		loop{
+			{
+				await(HeaterState30);				
+				System.out.println("Heater state (30): "+#HeaterState30);
+			}
+			||
+			{
+				await(HeaterState32);				
+				System.out.println("Heater state (32): "+#HeaterState32);
+			}
+			||
+			{
+				await(HeaterPower30);				
+				System.out.println("Heater power (30): "+#HeaterPower30);
+			}
+			||
+			{
+				await(HeaterPower32);				
+				System.out.println("Heater power (32): "+#HeaterPower32);
+			}
+
 		}
 	}
 

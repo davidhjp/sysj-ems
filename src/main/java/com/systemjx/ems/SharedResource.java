@@ -20,7 +20,7 @@ public class SharedResource {
 	public static void logException(Throwable e){
 		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw);) {
 			e.printStackTrace(pw);
-			log.warning(pw.toString());
+			log.warning(sw.toString());
 		} catch (IOException e1) {
 			log.severe(e1.getMessage());
 		}
