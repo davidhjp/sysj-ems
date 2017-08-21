@@ -20,6 +20,7 @@ buildscript {
 
 	repositories {
 		mavenCentral()
+		mavenLocal()
 		maven {
 			url repoUrl
 		}
@@ -33,6 +34,7 @@ buildscript {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 	maven {
 		url repoUrl
 	}
