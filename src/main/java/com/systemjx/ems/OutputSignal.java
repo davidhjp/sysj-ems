@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import com.systemj.Container;
+import com.systemj.Scheduler;
 import com.systemj.ipc.GenericSignalSender;
 
 public class OutputSignal extends GenericSignalSender {
@@ -24,8 +26,17 @@ public class OutputSignal extends GenericSignalSender {
 	private int packetType;
 	private boolean fsent = true;
 	private int preVal = Integer.MAX_VALUE;
-	private static Map<Thread, Map<String, Socket>> socketMap = new HashMap<>();
+	private static Map<Scheduler, Map<String, Socket>> socketMap = new HashMap<>();
 	private String urn;
+	private Scheduler mySch;
+	
+	public Scheduler getScheduler() {
+		Container sc = this;
+		while(!(sc instanceof Scheduler)) {
+			sc = sc.getParent();
+		}
+		return (Scheduler)sc;
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -37,11 +48,14 @@ public class OutputSignal extends GenericSignalSender {
 		this.nodeId = Integer.parseInt((String) t.get("Node"), 16);
 		this.packetType = Integer.parseInt((String) t.getOrDefault("Type", "A0"), 16);
 		this.urn = ip + ":" + port;
-		socketMap.putIfAbsent(Thread.currentThread(), new HashMap<>());
 	}
 	
 	public Map<String, Socket> getSockets(){
-		return socketMap.get(Thread.currentThread());
+		if(mySch == null) {
+			mySch = getScheduler();
+			socketMap.putIfAbsent(mySch, new HashMap<>());
+		}
+		return socketMap.get(mySch);
 	}
 	
 	protected byte[] buildPacket(byte v) {
@@ -123,7 +137,7 @@ public class OutputSignal extends GenericSignalSender {
 	@Override
 	public void cleanUp() {
 		synchronized (Thread.currentThread()) {
-			socketMap.get(Thread.currentThread()).forEach((k, v) -> {
+			getSockets().forEach((k, v) -> {
 				try {
 					v.close();
 				} catch (IOException e) {
