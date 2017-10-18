@@ -26,9 +26,12 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath sysj
-		classpath rtbase 
-		classpath rtdesktop
+//		classpath sysj
+//		classpath rtbase 
+//		classpath rtdesktop
+		classpath files(property('clpsysj'))
+		classpath files(property('clprte.base'))
+		classpath files(property('clprte.desktop'))
 	}
 }
 
@@ -41,9 +44,12 @@ repositories {
 }
 
 dependencies {
-	compile sysj
-	compile rtbase
-	compile rtdesktop
+//	compile sysj
+//	compile rtbase
+//	compile rtdesktop
+	compile files(property('clpsysj'))
+	compile files(property('clprte.base'))
+	compile files(property('clprte.desktop'))
 }
 
 task SystemJ(type: com.systemj.CompileSystemJ) {
