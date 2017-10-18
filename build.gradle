@@ -14,9 +14,9 @@ version = '1.0-SNAPSHOT'
 
 buildscript {
 	ext.repoUrl = 'https://github.com/hjparker/systemj-release/raw/snapshot/'
-	ext.sysj      = [group: 'com.systemjtechnology', name: 'systemj', version:'v2.1-155-g7ec0e29-SNAPSHOT']
-	ext.rtbase    = [group: 'com.systemjtechnology', name: 'systemj', version:'v2.1-155-g7ec0e29-SNAPSHOT', classifier: 'sjrt-base']
-	ext.rtdesktop = [group: 'com.systemjtechnology', name: 'systemj', version:'v2.1-155-g7ec0e29-SNAPSHOT', classifier: 'sjrt-desktop']
+	ext.sysj      = [group: 'com.systemjtechnology', name: 'systemj', version:'2.2-9-g17272ea-SNAPSHOT']
+	ext.rtbase    = [group: 'com.systemjtechnology', name: 'systemj', version:'2.2-9-g17272ea-SNAPSHOT', classifier: 'sjrt-base']
+	ext.rtdesktop = [group: 'com.systemjtechnology', name: 'systemj', version:'2.2-9-g17272ea-SNAPSHOT', classifier: 'sjrt-desktop']
 
 	repositories {
 		mavenCentral()
@@ -26,12 +26,9 @@ buildscript {
 		}
 	}
 	dependencies {
-//		classpath sysj
-//		classpath rtbase 
-//		classpath rtdesktop
-		classpath files(property('clpsysj'))
-		classpath files(property('clprte.base'))
-		classpath files(property('clprte.desktop'))
+		classpath sysj
+		classpath rtbase 
+		classpath rtdesktop
 	}
 }
 
@@ -44,12 +41,9 @@ repositories {
 }
 
 dependencies {
-//	compile sysj
-//	compile rtbase
-//	compile rtdesktop
-	compile files(property('clpsysj'))
-	compile files(property('clprte.base'))
-	compile files(property('clprte.desktop'))
+	compile sysj
+	compile rtbase
+	compile rtdesktop
 }
 
 task SystemJ(type: com.systemj.CompileSystemJ) {
