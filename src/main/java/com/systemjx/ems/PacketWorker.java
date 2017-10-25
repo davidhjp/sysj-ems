@@ -74,15 +74,15 @@ public class PacketWorker implements Runnable {
 	}
 
 	private static float getTemperature(byte[] b) {
-		return b[3] + b[4] / 100;
+		return (b[3] & 0xFF) + (b[4] & 0xFF) / 100;
 	}
 
 	private static float getHumidity(byte[] b) {
-		return b[5] + b[6] / 100;
+		return (b[5] & 0xFF) + (b[6] & 0xFF) / 100;
 	}
 
 	private static float getLight(byte[] b) {
-		return ((b[7] << 8) + b[8]) * 16;
+		return (((b[7] & 0xFF) << 8) + (b[8] & 0xFF)) * 16;
 	}
 	
 	private int getHeaterPower(byte[] b) {
