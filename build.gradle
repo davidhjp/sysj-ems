@@ -53,8 +53,11 @@ task SystemJ(type: com.systemj.CompileSystemJ) {
 }
 
 run {
+	def target = 'rpi.xml'
+	if (project.hasProperty('target'))
+		target = project['target']
 	main = 'com.systemj.SystemJRunner'
-	args 'src/main/configurations/rpi.xml'
+	args 'src/main/configurations/' + target
 	classpath 'build/classes/systemj'
 	dependsOn SystemJ
 }
