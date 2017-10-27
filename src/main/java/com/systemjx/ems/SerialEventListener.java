@@ -50,7 +50,6 @@ public class SerialEventListener implements SerialPortEventListener {
 						os.ifPresent(s -> s.getServer().setBuffer(new Object[] { true, h }));
 						os = Optional.ofNullable(isMap.getOrDefault(idLight, null));
 						os.ifPresent(s -> s.getServer().setBuffer(new Object[] { true, l }));
-						System.out.println("Received THL: " + t + ", " + h + ", " + l);
 						log.info("Received THL: " + t + ", " + h + ", " + l+" for node id "+getSourceNodeID(b));
 						break;
 					default:
