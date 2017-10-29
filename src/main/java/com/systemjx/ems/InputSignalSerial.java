@@ -1,7 +1,9 @@
 package com.systemjx.ems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import com.systemj.Signal;
@@ -11,7 +13,7 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 
 public class InputSignalSerial extends GenericSignalReceiver {
-	private static Map<String, Signal> isMap = new HashMap<>();
+	private static Map<String, List<Signal>> isMap = new HashMap<>();
 	private static boolean setEvent = false;
 	
 	@Override
@@ -33,7 +35,9 @@ public class InputSignalSerial extends GenericSignalReceiver {
 	public void configure(Hashtable arg) throws RuntimeException {
 		Signal signal = (Signal)arg.get("instance");
 		String fullName = buildID((String)arg.get("Group"), (String)arg.get("Node"), (String)arg.get("Sensor"));
-		isMap.putIfAbsent(fullName, signal);
+		List<Signal> sl = isMap.getOrDefault(fullName, new ArrayList<>());
+		sl.add(signal);
+		isMap.putIfAbsent(fullName, sl);
 		final SerialPort sp = SharedResource.getSerialPort();
 		synchronized (InputSignalSerial.class) {
 			if (!setEvent) {

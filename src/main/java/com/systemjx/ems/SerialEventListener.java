@@ -1,16 +1,17 @@
 package com.systemjx.ems;
 
-import static com.systemj.Utils.log;
 import static com.systemjx.ems.InputSignalSerial.buildID;
 import static com.systemjx.ems.SharedResource.PACKET_TYPE_THL;
 import static com.systemjx.ems.SharedResource.SENSOR_HUMIDITY;
 import static com.systemjx.ems.SharedResource.SENSOR_LIGHT;
 import static com.systemjx.ems.SharedResource.SENSOR_TEMPERATURE;
 import static com.systemjx.ems.SharedResource.logException;
+import static com.systemjx.ems.SharedResource.logger;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.logging.Logger;
 
 import com.systemj.Signal;
 
@@ -21,9 +22,9 @@ import jssc.SerialPortException;
 
 public class SerialEventListener implements SerialPortEventListener {
 	
-	private Map<String, Signal> isMap;
+	private Map<String, List<Signal>> isMap;
 
-	public SerialEventListener(Map<String, Signal> isMap) {
+	public SerialEventListener(Map<String, List<Signal>> isMap) {
 		this.isMap = isMap;
 	}
 	
@@ -44,16 +45,16 @@ public class SerialEventListener implements SerialPortEventListener {
 						float h = getHumidity(b);
 						float l = getLight(b);
 						
-						Optional<Signal> os = Optional.ofNullable(isMap.getOrDefault(idTemp, null));
-						os.ifPresent(s -> s.getServer().setBuffer(new Object[] { true, t }));
-						os = Optional.ofNullable(isMap.getOrDefault(idHumidity, null));
-						os.ifPresent(s -> s.getServer().setBuffer(new Object[] { true, h }));
-						os = Optional.ofNullable(isMap.getOrDefault(idLight, null));
-						os.ifPresent(s -> s.getServer().setBuffer(new Object[] { true, l }));
-						log.info("Received THL: " + t + ", " + h + ", " + l+" for node id "+getSourceNodeID(b));
+						List<Signal> os = isMap.getOrDefault(idTemp, Collections.emptyList());
+						os.forEach(s -> s.getServer().setBuffer(new Object[] {true, t}));
+						os = isMap.getOrDefault(idHumidity, Collections.emptyList());
+						os.forEach(s -> s.getServer().setBuffer(new Object[] {true, h}));
+						os = isMap.getOrDefault(idLight, Collections.emptyList());
+						os.forEach(s -> s.getServer().setBuffer(new Object[] {true, l}));
+						logger.fine("Received THL: " + t + ", " + h + ", " + l+" for node id "+getSourceNodeID(b));
 						break;
 					default:
-						log.info("Unrecognized packet format " + String.format("%02X", b[0] & 0xFF));
+						logger.info("Unrecognized packet format " + String.format("%02X", b[0] & 0xFF));
 						break;
 					}
 				}
