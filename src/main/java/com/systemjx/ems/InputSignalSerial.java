@@ -9,12 +9,9 @@ import java.util.Map;
 import com.systemj.Signal;
 import com.systemj.ipc.GenericSignalReceiver;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
-
 public class InputSignalSerial extends GenericSignalReceiver {
-	private static Map<String, List<Signal>> isMap = new HashMap<>();
-	private static boolean setEvent = false;
+	private static final Map<String, List<Signal>> isMap = new HashMap<>();
+	final SerialPortConnector spc = new SerialPortConnector();
 	
 	@Override
 	public synchronized void getBuffer(Object[] obj) {
@@ -38,17 +35,15 @@ public class InputSignalSerial extends GenericSignalReceiver {
 		List<Signal> sl = isMap.getOrDefault(fullName, new ArrayList<>());
 		sl.add(signal);
 		isMap.putIfAbsent(fullName, sl);
-		final SerialPort sp = SharedResource.getSerialPort();
-		synchronized (InputSignalSerial.class) {
-			if (!setEvent) {
-				try {
-					sp.addEventListener(new SerialEventListener(isMap), SerialPort.MASK_RXCHAR);
-				} catch (SerialPortException e) {
-					SharedResource.logException(e);
-				}
-				setEvent = true;
-			}
-		}
+	}
+
+	public static Map<String, List<Signal>> getIsmap() {
+		return isMap;
+	}
+
+	@Override
+	public void cleanUp() {
+		spc.shutDownPortCheckerThread();
 	}
 
 }

@@ -1,16 +1,9 @@
 package com.systemjx.ems;
 
-import static com.systemj.Utils.log;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Optional;
 import java.util.logging.Logger;
-
-import jssc.SerialPort;
-import jssc.SerialPortException;
-import jssc.SerialPortList;
 
 public class SharedResource {
 	static final String SENSOR_TEMPERATURE = "temperature";
@@ -31,53 +24,9 @@ public class SharedResource {
 	public static void logException(Throwable e){
 		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw);) {
 			e.printStackTrace(pw);
-			log.warning(sw.toString());
+			logger.warning(sw.toString());
 		} catch (IOException e1) {
-			log.severe(e1.getMessage());
+			logger.severe(e1.getMessage());
 		}
 	}
-	
-	
-	// Serial port
-	private static SerialPort sp;
-	
-	static {
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			if(sp != null) {
-				try {
-					sp.closePort();
-					logger.info("SerialPort closed");
-				} catch (SerialPortException e) {
-					SharedResource.logException(e);
-				}
-				
-			}
-		}));
-	}
-
-	public static SerialPort getSerialPort() {
-		if (sp == null) {
-			Optional<String> portO = Optional.ofNullable(System.getProperty("ems.serial.port", null));
-			String port = portO.orElseGet(() -> {
-				String[] portList = SerialPortList.getPortNames();
-				if(portList.length > 0)
-					return portList[0];
-				return "";
-			});
-			SharedResource.sp = new SerialPort(port);
-			try {
-				sp.openPort();
-				sp.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-				logger.info("SerialPort opened: "+sp.isOpened()+", Port name: "+sp.getPortName());
-			} catch (SerialPortException e) {
-				SharedResource.logException(e);
-			}
-		}
-		return sp;
-	}
-	
-	public static void openSerialPort(String port) {
-
-	}
-	
 }

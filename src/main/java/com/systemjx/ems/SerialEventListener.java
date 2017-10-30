@@ -5,13 +5,12 @@ import static com.systemjx.ems.SharedResource.PACKET_TYPE_THL;
 import static com.systemjx.ems.SharedResource.SENSOR_HUMIDITY;
 import static com.systemjx.ems.SharedResource.SENSOR_LIGHT;
 import static com.systemjx.ems.SharedResource.SENSOR_TEMPERATURE;
-import static com.systemjx.ems.SharedResource.logException;
 import static com.systemjx.ems.SharedResource.logger;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
 import com.systemj.Signal;
 
@@ -23,15 +22,27 @@ import jssc.SerialPortException;
 public class SerialEventListener implements SerialPortEventListener {
 	
 	private Map<String, List<Signal>> isMap;
+	private final SerialPortConnector spc = new SerialPortConnector();
 
 	public SerialEventListener(Map<String, List<Signal>> isMap) {
 		this.isMap = isMap;
 	}
 	
+	public boolean isLastEventLongerThan(long min) {
+		return System.currentTimeMillis() - lastEvent > TimeUnit.MINUTES.toMillis(min);
+	}
+	
+	private long lastEvent = System.currentTimeMillis();
+	
+	public void updateLastEvent() {
+		lastEvent = System.currentTimeMillis();
+	}
+	
 	@Override
 	public void serialEvent(SerialPortEvent ev) {
-		final SerialPort sp = SharedResource.getSerialPort();
-		if (ev.isRXCHAR() && ev.getEventValue() > 0) {
+		lastEvent = System.currentTimeMillis();
+		final SerialPort sp = spc.getSerialPort();
+		if (ev.isRXCHAR() && ev.getEventValue() > 0 && sp != null) {
 			try {
 				byte[] b = sp.readBytes(ev.getEventValue());
 				if ((b[0] & 0xFF) == 0xAA) {
@@ -59,7 +70,8 @@ public class SerialEventListener implements SerialPortEventListener {
 					}
 				}
 			} catch (SerialPortException e) {
-				logException(e);
+				logger.warning(e.getMessage()+" at "+e.getMethodName()+", closing the port "+e.getPortName());
+				spc.closeSerialPort();
 			}
 		}
 	}
