@@ -67,3 +67,5 @@ jar {
 	if(version.endsWith("-SNAPSHOT"))
 		classifier getDate()
 }
+
+mainClassName = 'com.systemj.SystemJRunner'
