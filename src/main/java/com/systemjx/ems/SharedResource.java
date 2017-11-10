@@ -29,4 +29,13 @@ public class SharedResource {
 			logger.severe(e1.getMessage());
 		}
 	}
+	
+	public static void logFine(Throwable e){
+		try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw);) {
+			e.printStackTrace(pw);
+			logger.fine(sw.toString());
+		} catch (IOException e1) {
+			logger.severe(e1.getMessage());
+		}
+	}
 }

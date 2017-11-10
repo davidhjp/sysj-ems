@@ -13,17 +13,21 @@ public class InputSignal extends GenericSignalReceiver {
 	private static volatile boolean skipRun = false;
 	protected static final ExecutorService es = Executors.newCachedThreadPool();
 	protected static final Map<String, PacketWorker> tasks = new HashMap<>();
+	
 	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void configure(Hashtable tb) throws RuntimeException {
 		String ip = (String) tb.get("IP");
 		int port = Integer.parseInt((String) tb.get("Port"));
 		String urn = ip + ":" + port;
-		PacketWorker pw = tasks.getOrDefault(urn, new PacketWorker(ip, port));
+		PacketWorker pw = tasks.getOrDefault(urn, getPacketWorker(ip, port));
 		pw.addSignal(tb);
 		tasks.put(urn, pw);
 	}
-
+	
+	protected PacketWorker getPacketWorker(String ip, int port) {
+		return new CompactPacketReceiver(ip, port);
+	}
 
 
 	@Override

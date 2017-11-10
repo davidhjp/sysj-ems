@@ -18,17 +18,17 @@ import com.systemj.ipc.GenericSignalSender;
 
 public class OutputSignal extends GenericSignalSender {
 	private static final int PACKET_SIZE = 5;
-	private String ip;
-	private int port;
-	private int actuatorId;
-	private int groupId;
-	private int nodeId;
-	private int packetType;
-	private boolean fsent = true;
-	private int preVal = Integer.MAX_VALUE;
-	private static Map<Scheduler, Map<String, Socket>> socketMap = new HashMap<>();
-	private String urn;
-	private Scheduler mySch;
+	protected String ip;
+	protected int port;
+	protected int actuatorId;
+	protected int groupId;
+	protected int nodeId;
+	protected int packetType;
+	protected boolean fsent = true;
+	protected Object preVal = Integer.MAX_VALUE;
+	protected static Map<Scheduler, Map<String, Socket>> socketMap = new HashMap<>();
+	protected String urn;
+	protected Scheduler mySch;
 	
 	public Scheduler getScheduler() {
 		Container sc = this;
@@ -58,14 +58,14 @@ public class OutputSignal extends GenericSignalSender {
 		return socketMap.get(mySch);
 	}
 	
-	protected byte[] buildPacket(byte v) {
+	protected byte[] buildPacket(Object v) {
 		ByteBuffer b = ByteBuffer.allocate(PACKET_SIZE + 3);
 		b.putShort((short)0xAABB);
 		b.put((byte)PACKET_SIZE);
 		b.putShort((short)(groupId << 8 | nodeId));
 		b.put((byte)packetType); // Packet type, default: 0xA0
 		b.put((byte)actuatorId);
-		b.put(v);
+		b.put((byte)v);
 		b.position(0);
 		byte[] bb = new byte[PACKET_SIZE + 3];
 		b.get(bb);
@@ -92,11 +92,12 @@ public class OutputSignal extends GenericSignalSender {
 		return true;
 	}
 
-	private void sendPacket(byte[] b) {
+	protected void sendPacket(byte[] b) {
 		Socket s = getSockets().get(urn);
 		try {
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.write(b);
+			dos.flush();
 		} catch (IOException e) {
 			try {
 				s.close();
@@ -109,14 +110,14 @@ public class OutputSignal extends GenericSignalSender {
 	
 	@Override
 	public void run() {
-		int val;
+		Object val;
 		try {
-			val = (int) super.buffer[1];
+			val = super.buffer[1];
 		} catch (NullPointerException e) {
 			val = 1;
 		}
 		if(fsent || val != preVal) {
-			byte[] b = buildPacket((byte) val);
+			byte[] b = buildPacket(val);
 			sendPacket(b);
 			fsent = false;
 			preVal = val;
@@ -127,7 +128,7 @@ public class OutputSignal extends GenericSignalSender {
 	public void arun() {
 		if (!fsent) {
 			if(setup(super.buffer)){
-				byte[] b = buildPacket((byte) 0);
+				byte[] b = buildPacket(0);
 				sendPacket(b);
 				fsent = true;
 			}
