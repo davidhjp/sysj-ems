@@ -47,7 +47,7 @@ public class NativePacketReceiver extends CompactPacketReceiver {
 					while (!Thread.currentThread().isInterrupted()) {
 						try {
 							is.readFully(magic);
-							if (magic[0] == 0xBB) {
+							if ((magic[0] & 0xff) == 0xAA) {
 								int len = magic[1];
 								byte[] payload = new byte[len];
 								// Reading the remaining bytes
@@ -75,7 +75,7 @@ public class NativePacketReceiver extends CompactPacketReceiver {
 	private void parsePacket(byte[] payload) {
 		int pType = Integer.parseInt(getPacketType(payload), 16);
 		int group = Integer.parseInt(getGroup(payload), 16);
-		int node = Integer.parseInt(getGroup(payload), 16);
+		int node = Integer.parseInt(getNode(payload), 16);
 		switch (pType) {
 		case PACKET_TYPE_FRQ: {
 			String id = buildID(group, node, pType);
@@ -112,6 +112,6 @@ public class NativePacketReceiver extends CompactPacketReceiver {
 	
 	@Override
 	protected short getShort(byte[] b) {
-		return (short)((b[10] << 8) | b[11]);
+		return (short)(((b[10] & 0xff) << 8) | b[11] & 0xff);
 	}
 }
