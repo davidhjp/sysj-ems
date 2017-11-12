@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 public class OutputTCP extends OutputSignal {
 	private int packetId;
-	private static final int PACKET_BASE_SIZE = 5;
+	private static final int PACKET_BASE_SIZE = 4;
 	
 	protected static int sizeof(Class dataType) {
 		if (dataType == null)
@@ -61,15 +61,15 @@ public class OutputTCP extends OutputSignal {
 	@Override
 	protected byte[] buildPacket(Object v) {
 		final int packetDataSize = v instanceof Number ? sizeof(v.getClass()) : v.toString().getBytes().length;
-		ByteBuffer b = ByteBuffer.allocate(packetDataSize + PACKET_BASE_SIZE);
+		ByteBuffer b = ByteBuffer.allocate(packetDataSize + 1 + PACKET_BASE_SIZE);
 		b.put((byte)0xBB);
 		b.putShort((short)(nodeId << 8 | groupId));
-		b.put((byte)packetDataSize);
+		b.put((byte)(packetDataSize + 1));
 		b.put((byte)packetId);
 		byte[] data = getByteArray(v);
 		b.put(data);
 		b.position(0);
-		byte[] bb = new byte[packetDataSize + PACKET_BASE_SIZE];
+		byte[] bb = new byte[packetDataSize + 1 + PACKET_BASE_SIZE];
 		b.get(bb);
 		return bb;
 	}
