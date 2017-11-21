@@ -1,19 +1,14 @@
 package com.systemjx.ems;
 
 import static com.systemj.Utils.log;
-import static com.systemjx.ems.SharedResource.logException;
-import static com.systemjx.ems.SharedResource.logFine;
 import static com.systemjx.ems.SharedResource.logger;
 
 import java.io.DataInputStream;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +54,7 @@ public class NativePacketReceiver extends CompactPacketReceiver {
 						}
 					}
 				}
-			} catch (SocketTimeoutException e) {
+			} catch (SocketTimeoutException | ConnectException e) {
 			} catch (Exception e) {
 				logger.fine(e.getMessage());
 			}

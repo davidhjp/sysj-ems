@@ -7,6 +7,10 @@ import static com.systemjx.ems.SharedResource.SENSOR_LIGHT;
 import static com.systemjx.ems.SharedResource.SENSOR_TEMPERATURE;
 import static com.systemjx.ems.SharedResource.logger;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +27,10 @@ public class SerialEventListener implements SerialPortEventListener {
 	
 	private Map<String, List<Signal>> isMap;
 	private final SerialPortConnector spc = new SerialPortConnector();
-
+	private static final String IP_GUI = "127.0.0.1";
+	private static final int PORT_GUI  = 7072;
+	private Socket socket = new Socket();
+	
 	public SerialEventListener(Map<String, List<Signal>> isMap) {
 		this.isMap = isMap;
 	}
@@ -49,19 +56,43 @@ public class SerialEventListener implements SerialPortEventListener {
 					final int type = getPacketType(b);
 					switch (type) {
 					case PACKET_TYPE_THL:
-						String idTemp = buildID(getSourceGroupID(b), getSourceNodeID(b), SENSOR_TEMPERATURE);
-						String idHumidity = buildID(getSourceGroupID(b), getSourceNodeID(b), SENSOR_HUMIDITY);
-						String idLight = buildID(getSourceGroupID(b), getSourceNodeID(b), SENSOR_LIGHT);
+						int sourceGroupId = getSourceGroupID(b);
+						int sourceNodeId = getSourceNodeID(b);
+						String idTemp = buildID(sourceGroupId, sourceNodeId, SENSOR_TEMPERATURE);
+						String idHumidity = buildID(sourceGroupId, sourceNodeId, SENSOR_HUMIDITY);
+						String idLight = buildID(sourceGroupId, sourceNodeId, SENSOR_LIGHT);
 						float t = getTemperature(b);
 						float h = getHumidity(b);
 						float l = getLight(b);
 						
 						List<Signal> os = isMap.getOrDefault(idTemp, Collections.emptyList());
-						os.forEach(s -> s.getServer().setBuffer(new Object[] {true, t}));
-						os = isMap.getOrDefault(idHumidity, Collections.emptyList());
-						os.forEach(s -> s.getServer().setBuffer(new Object[] {true, h}));
-						os = isMap.getOrDefault(idLight, Collections.emptyList());
-						os.forEach(s -> s.getServer().setBuffer(new Object[] {true, l}));
+						if (!os.isEmpty()) {
+							os.forEach(s -> s.getServer().setBuffer(new Object[] { true, t }));
+							os = isMap.getOrDefault(idHumidity, Collections.emptyList());
+							os.forEach(s -> s.getServer().setBuffer(new Object[] { true, h }));
+							os = isMap.getOrDefault(idLight, Collections.emptyList());
+							os.forEach(s -> s.getServer().setBuffer(new Object[] { true, l }));
+						} else {
+							try {
+								if (socket.isClosed() || !socket.isConnected()) {
+									socket.close();
+									socket = new Socket();
+									socket.connect(new InetSocketAddress(IP_GUI, PORT_GUI), 50);
+								}
+								BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+								final String sd = "{\"cd\": \"_env_fallback_\", \"name\": \"env\", \"status\": true, \"temperature\": "+t+", \"humidity\": "+h+", \"light\": "+l
+												  + ", \"node\": " + sourceNodeId + "," + "\"group\": " + sourceGroupId + "}";
+								bos.write(sd.getBytes());
+								bos.flush();
+							} catch (IOException e) {
+								try {
+									SharedResource.logger.fine(e.getMessage());
+									socket.close();
+								} catch (IOException e1) {
+									SharedResource.logException(e1);
+								}
+							}
+						}
 						logger.fine("Received THL: " + t + ", " + h + ", " + l+" for node id "+getSourceNodeID(b));
 						break;
 					default:
