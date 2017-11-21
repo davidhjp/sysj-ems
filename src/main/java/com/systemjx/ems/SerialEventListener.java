@@ -27,8 +27,8 @@ public class SerialEventListener implements SerialPortEventListener {
 	
 	private Map<String, List<Signal>> isMap;
 	private final SerialPortConnector spc = new SerialPortConnector();
-	private static final String IP_GUI = "127.0.0.1";
-	private static final int PORT_GUI  = 7072;
+	private static final String IP_GUI = System.getProperty("ems.hostname", "127.0.0.1");
+	private static final int PORT_GUI  = Integer.parseInt(System.getProperty("ems.port", "7072"));
 	private Socket socket = new Socket();
 	
 	public SerialEventListener(Map<String, List<Signal>> isMap) {
