@@ -29,7 +29,7 @@ public class CompactPacketReceiver implements PacketWorker {
 	protected String ip;
 	protected int port;
 	protected byte[] magic = new byte[3];
-	protected Map<String, List<Signal>> is = new HashMap<>();
+	protected static Map<String, List<Signal>> is = new HashMap<>();
 	// protected Map<String, List<Signal>> os = new HashMap<>();
 
 	public CompactPacketReceiver(String ip, int port) {
@@ -53,7 +53,7 @@ public class CompactPacketReceiver implements PacketWorker {
 		if (signal.getDir() == Signal.INPUT) {
 			List<Signal> l = is.getOrDefault(id, new ArrayList<Signal>());
 			l.add(signal);
-			is.put(id, l);
+			is.putIfAbsent(id, l);
 		}
 	}
 

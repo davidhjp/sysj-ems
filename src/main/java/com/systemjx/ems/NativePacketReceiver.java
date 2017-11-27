@@ -1,6 +1,5 @@
 package com.systemjx.ems;
 
-import static com.systemj.Utils.log;
 import static com.systemjx.ems.SharedResource.logger;
 
 import java.io.DataInputStream;
@@ -28,7 +27,7 @@ public class NativePacketReceiver extends CompactPacketReceiver {
 		if (signal.getDir() == Signal.INPUT) {
 			List<Signal> l = is.getOrDefault(id, new ArrayList<Signal>());
 			l.add(signal);
-			is.put(id, l);
+			is.putIfAbsent(id, l);
 		}
 	}
 
@@ -61,29 +60,40 @@ public class NativePacketReceiver extends CompactPacketReceiver {
 		}
 	}
 	
-	public final static int PACKET_TYPE_FRQ = 12;
+	public final static int PACKET_TYPE_FRQ     = 12;
+	public final static int PACKET_TYPE_POWER   = 13;
+	public final static int PACKET_TYPE_CURRENT = 14;
+	public final static int PACKET_TYPE_VOLTAGE = 15;
 	
 	protected String buildID(int groupId, int nodeId, int subId) {
 		return super.buildID(Integer.toString(groupId), Integer.toString(nodeId), Integer.toString(subId));
+	}
+	
+	private void setValue(List<Signal> signals, Object value) {
+		signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, value }));
 	}
 	
 	private void parsePacket(byte[] payload) {
 		int pType = Integer.parseInt(getPacketType(payload), 16);
 		int group = Integer.parseInt(getGroup(payload), 16);
 		int node = Integer.parseInt(getNode(payload), 16);
+		String id = buildID(group, node, pType);
+		List<Signal> signals = this.is.getOrDefault(id, new ArrayList<Signal>());
 		switch (pType) {
+		case PACKET_TYPE_POWER:
+		case PACKET_TYPE_CURRENT:
+		case PACKET_TYPE_VOLTAGE:
+			setValue(signals, (float)getShort(payload));
+			break;
 		case PACKET_TYPE_FRQ: {
-			String id = buildID(group, node, pType);
-			int freq = getShort(payload);
-			List<Signal> signals = this.is.getOrDefault(id, new ArrayList<Signal>());
-			signals.stream().forEach(s -> s.getServer().setBuffer(new Object[] { true, freq }));
+			setValue(signals, (int)getShort(payload));
 			break;
 		}
 		default:
-			log.warning("Unexpected packet type: " + pType);
+			logger.warning("Unexpected packet type: " + pType);
 			break;
 		}
-		log.fine("Received Group: " + group + " Node: " + node + " Type: " + pType);
+		logger.fine("Received Group: " + group + " Node: " + node + " Type: " + pType);
 	}
 
 	@Override
