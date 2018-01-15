@@ -22,7 +22,11 @@ public class InputSignal extends GenericSignalReceiver {
 		String urn = ip + ":" + port;
 		PacketWorker pw = tasks.getOrDefault(urn, getPacketWorker(ip, port));
 		pw.addSignal(tb);
-		tasks.put(urn, pw);
+		if (!tasks.containsKey(urn)) {
+			tasks.put(urn, pw);
+			if(!es.isShutdown())
+				es.submit(pw);
+		}
 	}
 	
 	protected PacketWorker getPacketWorker(String ip, int port) {
@@ -41,15 +45,15 @@ public class InputSignal extends GenericSignalReceiver {
 
 	@Override
 	public void run() {
-		if (!skipRun) {
-			synchronized (InputSignal.class) {
-				if (!es.isShutdown()) {
-					tasks.forEach((k, v) -> es.submit(v));
-					tasks.clear();
-					skipRun = true;
-				}
-			}
-		}
+//		if (!skipRun) {
+//			synchronized (InputSignal.class) {
+//				if (!es.isShutdown()) {
+//					tasks.forEach((k, v) -> es.submit(v));
+//					tasks.clear();
+//					skipRun = true;
+//				}
+//			}
+//		}
 	}
 
 	
